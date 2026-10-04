@@ -1,0 +1,1048 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#172b46">
+<title>A little message for you 💗</title>
+
+<style>
+:root {
+  --bg: #070c10;
+  --incoming: #20272e;
+  --outgoing: #075a78;
+  --text: #f1f5f7;
+  --muted: #91a3ad;
+  --accent: #1685ae;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: radial-gradient(ellipse at center, #315767, #173947 55%, #10232e);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+}
+
+.layout {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.phone {
+  width: min(100%, 360px);
+  height: min(780px, calc(100dvh - 90px));
+  min-height: 500px;
+  padding: 7px;
+  border-radius: 42px;
+  background: linear-gradient(135deg, #a7b3b8, #172128 20%, #020609 48%, #647179 80%, #080d10);
+  box-shadow: 0 22px 55px #0007, inset 0 0 0 1px #c0c9cc;
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 35px;
+  background: var(--bg);
+  border: 1px solid #263139;
+}
+
+.island {
+  position: absolute;
+  z-index: 20;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 23px;
+  border-radius: 20px;
+  background: #020406;
+  border: 1px solid #1c252b;
+}
+
+.status {
+  position: absolute;
+  z-index: 21;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 38px;
+  padding: 12px 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: white;
+  font-size: 10px;
+  font-weight: 750;
+  pointer-events: none;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.signal {
+  font-size: 10px;
+  letter-spacing: -2px;
+}
+
+.battery {
+  width: 16px;
+  height: 8px;
+  border: 1px solid white;
+  border-radius: 2px;
+  position: relative;
+}
+
+.battery::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  width: 75%;
+  background: white;
+  border-radius: 1px;
+}
+
+.battery::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 2px;
+  width: 2px;
+  height: 3px;
+  background: white;
+}
+
+/* IPHONE HOME SCREEN */
+
+.home {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 70px 17px 22px;
+  background:
+    radial-gradient(ellipse at 15% 20%, #f5b7c9a6, transparent 35%),
+    radial-gradient(ellipse at 90% 60%, #7db9d6a6, transparent 40%),
+    linear-gradient(155deg, #394f79, #b1a4c6 48%, #e6c7d3);
+  transition: opacity .25s ease, transform .3s ease;
+}
+
+.home.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.04);
+  visibility: hidden;
+}
+
+.date-line {
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  text-shadow: 0 1px 7px #0002;
+}
+
+.big-clock {
+  margin-top: 5px;
+  text-align: center;
+  color: white;
+  font-size: clamp(56px, 17vw, 76px);
+  line-height: 1.05;
+  font-weight: 250;
+  letter-spacing: -3px;
+  text-shadow: 0 2px 12px #0001;
+}
+
+.widget-label {
+  text-align: center;
+  color: white;
+  font-size: 10px;
+  margin-top: 7px;
+  opacity: .9;
+}
+
+.notifications {
+  margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.notification {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ffffff45;
+  border-radius: 20px;
+  background: #f7f8f9d9;
+  color: #252b34;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 5px 18px #26344b16;
+  backdrop-filter: blur(18px);
+  animation: appear .5s ease;
+}
+
+.notification-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 9px;
+  color: #565d68;
+}
+
+.notification-app {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+.wa-icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  color: white;
+  background: #20bd67;
+  font-size: 13px;
+}
+
+.notification-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.notification-avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #dce9ef, #8eb6c7);
+  color: #274356;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.notification-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-name {
+  font-size: 12px;
+  font-weight: 750;
+  margin-bottom: 4px;
+}
+
+.notification-message {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #414752;
+}
+
+.notification-hint {
+  margin-top: 8px;
+  text-align: center;
+  color: #fff;
+  font-size: 10px;
+  text-shadow: 0 1px 5px #0002;
+}
+
+.home-apps {
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.app-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  font-size: 20px;
+  box-shadow: 0 4px 12px #0002;
+}
+
+.app-phone { background: #35c96c; }
+.app-message { background: #4dca80; }
+.app-music { background: linear-gradient(135deg, #f56b91, #9b6fe4); }
+.app-camera { background: linear-gradient(135deg, #fafafa, #aab2bd); }
+
+.home-indicator {
+  position: absolute;
+  z-index: 30;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95px;
+  height: 4px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 1px 5px #0003;
+}
+
+/* CHAT ROOM */
+
+.chat-room {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(25px);
+  transition: opacity .25s ease, transform .25s ease;
+  visibility: hidden;
+}
+
+.chat-room.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.chat-header {
+  margin-top: 37px;
+  height: 49px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 8px;
+  border-bottom: 1px solid #182128;
+  background: #0b1116;
+}
+
+.back {
+  border: none;
+  background: transparent;
+  color: #83c8e5;
+  font-size: 27px;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #e1d6c3, #699ba8);
+  color: #17242a;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.contact-name { font-size: 11px; font-weight: 700; }
+.contact-status { font-size: 9px; color: var(--muted); margin-top: 3px; }
+.more { margin-left: auto; color: #b8c6cc; letter-spacing: 2px; }
+
+.chat {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 11px 8px;
+  scroll-behavior: smooth;
+  background:
+    radial-gradient(ellipse at 15% 20%, #13232c 0, transparent 55%),
+    var(--bg);
+}
+
+.chat::-webkit-scrollbar { width: 0; }
+
+.day-divider {
+  align-self: center;
+  font-size: 8px;
+  color: #9aaab2;
+  background: #172128;
+  padding: 5px 9px;
+  border-radius: 8px;
+  margin: 2px 0 5px;
+}
+
+.msg {
+  max-width: 91%;
+  align-self: flex-start;
+  background: var(--incoming);
+  border-radius: 12px;
+  padding: 9px 10px 6px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: #eef2f4;
+  overflow-wrap: anywhere;
+  animation: appear .25s ease-out;
+}
+
+.msg.girl {
+  align-self: flex-end;
+  background: var(--outgoing);
+  border-bottom-right-radius: 4px;
+}
+
+.meta {
+  font-size: 8px;
+  color: #9aabb4;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.msg.girl .meta { color: #b0d5e2; }
+
+.vn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 145px;
+}
+
+.play {
+  width: 29px;
+  height: 29px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #3d9abc;
+  color: #e7f8ff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.vn-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.duration { font-size: 9px; color: #dbeaf0; }
+.wave { height: 18px; display: flex; align-items: center; gap: 2px; overflow: hidden; }
+
+.wave i {
+  display: block;
+  width: 2px;
+  min-width: 2px;
+  border-radius: 2px;
+  background: #b3d9e5;
+  height: var(--h);
+  opacity: .85;
+}
+
+.playing .wave i { animation: pulse .55s ease-in-out infinite alternate; }
+
+.choices {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px;
+  background: #101920;
+  border-top: 1px solid #202e36;
+  max-height: 32%;
+  overflow-y: auto;
+}
+
+.choices-title {
+  font-size: 10px;
+  color: #9db4c0;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.choice {
+  border: 1px solid #31566a;
+  background: #142c39;
+  color: #e8f5fa;
+  border-radius: 13px;
+  padding: 10px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.choice:disabled { opacity: .5; cursor: default; }
+
+.final-photo {
+  width: min(100%, 250px);
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  margin-top: 6px;
+  border: 1px solid #49606c;
+}
+
+.composer {
+  height: 43px;
+  flex-shrink: 0;
+  border-top: 1px solid #1b242a;
+  background: #080c0f;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 9px;
+}
+
+.plus { font-size: 19px; color: #a5b8c2; }
+
+.input {
+  height: 29px;
+  display: flex;
+  align-items: center;
+  padding: 0 11px;
+  border: 1px solid #2d3940;
+  background: #151b20;
+  border-radius: 20px;
+  color: #71848e;
+  font-size: 9px;
+  flex: 1;
+  min-width: 0;
+}
+
+.send {
+  height: 26px;
+  width: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: white;
+  font-size: 13px;
+}
+
+.controls { display: flex; justify-content: center; gap: 8px; }
+
+.btn {
+  background: #123749;
+  border: 1px solid #3e758d;
+  color: #e7f7ff;
+  border-radius: 20px;
+  padding: 9px 15px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.help {
+  max-width: 350px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #b4c8d1;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  from { transform: scaleY(.55); }
+  to { transform: scaleY(1.15); }
+}
+
+@media (max-height: 650px) {
+  .phone { height: calc(100dvh - 75px); min-height: 450px; }
+  .notifications { margin-top: 22px; }
+  .msg { padding: 6px 8px 5px; }
+  .chat { gap: 5px; }
+}
+</style>
+</head>
+
+<body>
+<div class="layout">
+  <div class="phone">
+    <div class="screen">
+
+      <div class="status">
+        <span id="statusTime">00:00</span>
+        <span class="status-right">
+          <span class="signal">▮▮▮</span>
+          <span>Wi-Fi</span>
+          <span class="battery"></span>
+        </span>
+      </div>
+
+      <!-- HOME SCREEN IPHONE -->
+      <section class="home" id="home">
+        <div class="date-line" id="homeDate">Senin, 1 Januari</div>
+        <div class="big-clock" id="homeClock">00:00</div>
+        <div class="widget-label">Swipe up to unlock</div>
+
+        <div class="notifications">
+          <button class="notification" id="openNotification">
+            <div class="notification-top">
+              <span class="notification-app">
+                <span class="wa-icon">☎</span>
+                WHATSAPP
+              </span>
+              <span id="notificationTime">sekarang</span>
+            </div>
+
+            <div class="notification-body">
+              <div class="notification-avatar">S</div>
+              <div class="notification-copy">
+                <div class="notification-name">Sayang💗</div>
+                <div class="notification-message" id="notificationMessage">
+                  sayanggg, pliss buka ya... aku mau ngomong sesuatu 🥺
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <div class="notification-hint">
+            Ketuk notifikasi untuk membuka pesan 💌
+          </div>
+        </div>
+
+        <div class="home-apps">
+          <div class="app-icon app-phone">☎</div>
+          <div class="app-icon app-message">●</div>
+          <div class="app-icon app-music">♫</div>
+          <div class="app-icon app-camera">📷</div>
+        </div>
+      </section>
+
+      <!-- CHAT ROOM -->
+      <section class="chat-room" id="chatRoom">
+        <header class="chat-header">
+          <button class="back" id="backHome" aria-label="Kembali">‹</button>
+          <div class="avatar">S</div>
+          <div>
+            <div class="contact-name">Sayang💗</div>
+            <div class="contact-status" id="chatStatus">online</div>
+          </div>
+          <span class="more">•••</span>
+        </header>
+
+        <main class="chat" id="chat" aria-live="polite">
+          <div class="day-divider" id="todayDivider">HARI INI</div>
+
+          <div class="msg">
+            sebelum baca pesanku, dengerin VN ini dulu ya sayangg🥺💗
+            <div class="meta"><span class="messageTime"></span></div>
+          </div>
+
+          <div class="msg" id="openingVN">
+            <div class="vn">
+              <button class="play" id="openingPlay" aria-label="Putar voice note">▶</button>
+              <div class="vn-info">
+                <span class="duration">Voice note pembuka</span>
+                <span class="wave" id="openingWave"></span>
+              </div>
+            </div>
+            <div class="meta"><span class="messageTime"></span></div>
+          </div>
+        </main>
+
+        <section class="choices" id="choices">
+          <div class="choices-title" id="choiceTitle">
+          
+          </div>
+          <button class="choice" id="startChoice" disabled>
+            ▶ Putar VN pembuka dulu
+          </button>
+        </section>
+
+        <div class="composer">
+          <span class="plus">＋</span>
+          <div class="input" id="input">Menunggu pesan...</div>
+          <span class="send">➤</span>
+        </div>
+      </section>
+
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="restartButton">↻ Ulangi dari awal</button>
+  </div>
+</div>
+
+<audio id="vnAudio" preload="auto" src="vn.mp3"></audio>
+<audio id="bgMusic" preload="auto" loop src="musik.mp3"></audio>
+
+<script>
+const home = document.getElementById("home");
+const chatRoom = document.getElementById("chatRoom");
+const chat = document.getElementById("chat");
+const choicesBox = document.getElementById("choices");
+const audio = document.getElementById("vnAudio");
+const music = document.getElementById("bgMusic");
+
+let openingPlayed = false;
+let started = false;
+let locked = false;
+let notificationOpened = false;
+
+// JAM DAN TANGGAL OTOMATIS MENGIKUTI PERANGKAT
+function updateClock() {
+  const now = new Date();
+
+  const time = now.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+
+  const date = now.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long"
+  });
+
+  document.getElementById("statusTime").textContent = time;
+  document.getElementById("homeClock").textContent = time;
+  document.getElementById("homeDate").textContent = date;
+  document.getElementById("notificationTime").textContent = time;
+  document.getElementById("todayDivider").textContent =
+    date.charAt(0).toUpperCase() + date.slice(1);
+}
+
+function currentTime() {
+  return new Date().toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+}
+
+function stampMessages() {
+  document.querySelectorAll(".messageTime").forEach(el => {
+    el.textContent = currentTime();
+  });
+}
+
+updateClock();
+stampMessages();
+setInterval(updateClock, 1000);
+
+// BUKA ROOM CHAT SAAT NOTIFIKASI DIKETUK
+function openChat() {
+  if (notificationOpened) return;
+
+  notificationOpened = true;
+  home.classList.add("hidden");
+  chatRoom.classList.add("active");
+
+  document.getElementById("notificationMessage").textContent =
+    "Pesan dibuka 💗";
+
+  document.getElementById("input").textContent =
+    "Dengerin VN dulu ya...";
+
+  stampMessages();
+}
+
+document.getElementById("openNotification").addEventListener("click", openChat);
+
+// TOMBOL KEMBALI KE HOME IPHONE
+document.getElementById("backHome").addEventListener("click", () => {
+  chatRoom.classList.remove("active");
+  home.classList.remove("hidden");
+});
+
+// BENTUK GELOMBANG VOICE NOTE
+function makeWave() {
+  const wave = document.getElementById("openingWave");
+  if (!wave) return;
+
+  wave.innerHTML = Array.from({ length: 29 }, (_, i) =>
+    `<i style="--h:${4 + ((i * 11 + i * i * 3) % 14)}px"></i>`
+  ).join("");
+}
+
+makeWave();
+
+function enableContinue() {
+  openingPlayed = true;
+
+  const button = document.getElementById("startChoice");
+  if (button) {
+    button.disabled = false;
+    button.textContent = "Lanjut baca pesan 💗";
+  }
+}
+
+function bindVoiceButton() {
+  const button = document.getElementById("openingPlay");
+
+  button.onclick = async () => {
+    try {
+      if (audio.paused) {
+        await audio.play();
+        button.textContent = "Ⅱ";
+        document.getElementById("openingVN").classList.add("playing");
+      } else {
+        audio.pause();
+        button.textContent = "▶";
+        document.getElementById("openingVN").classList.remove("playing");
+      }
+    } catch (error) {
+      alert("VN belum bisa diputar. Pastikan file vn.mp3 tersedia.");
+    }
+  };
+}
+
+bindVoiceButton();
+
+audio.addEventListener("play", enableContinue);
+
+audio.addEventListener("ended", () => {
+  const button = document.getElementById("openingPlay");
+  const vn = document.getElementById("openingVN");
+
+  if (button) button.textContent = "▶";
+  if (vn) vn.classList.remove("playing");
+
+  enableContinue();
+});
+
+function esc(text) {
+  return String(text).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+function addBubble(text, side = "boy") {
+  const element = document.createElement("div");
+
+  element.className = "msg" + (side === "girl" ? " girl" : "");
+  element.innerHTML =
+    esc(text) +
+    `<div class="meta">${currentTime()}${side === "girl" ? " ✓✓" : ""}</div>`;
+
+  chat.appendChild(element);
+  chat.scrollTop = chat.scrollHeight;
+
+  return element;
+}
+
+function typing() {
+  const element = document.createElement("div");
+  element.className = "msg";
+  element.textContent = "sedang mengetik…";
+  chat.appendChild(element);
+  chat.scrollTop = chat.scrollHeight;
+  return element;
+}
+
+function wait(milliseconds) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
+async function showMessage(text, side) {
+  document.getElementById("chatStatus").textContent = "mengetik…";
+
+  const typingBubble = typing();
+  await wait(750);
+
+  typingBubble.remove();
+  addBubble(text, side);
+
+  document.getElementById("chatStatus").textContent = "online";
+
+  await wait(450);
+}
+
+async function startStory() {
+  if (!notificationOpened) {
+    openChat();
+  }
+
+  if (!openingPlayed) {
+    document.getElementById("choiceTitle").textContent =
+      "Putar VN pembuka dulu ya 💗";
+    return;
+  }
+
+  if (started || locked) return;
+
+  started = true;
+  locked = true;
+
+  try {
+    music.volume = 0.35;
+    await music.play();
+  } catch (error) {
+    document.getElementById("input").textContent =
+      "Musik tidak tersedia";
+  }
+
+  document.getElementById("startChoice").remove();
+
+  const shortChats = [
+    [
+      "Sayang, udaa dong ngambek nya",
+      "boy"
+    ],
+    [
+      "Aku masih marah",
+      "girl"
+    ],
+    [
+      "Plisss sayangg maafin aku yaa. Aku ngerti sekarang kenapa kamu marah. Aku minta maaf uda bikin kamu cape.",
+      "boy"
+    ]
+  ];
+
+  for (const item of shortChats) {
+    await showMessage(item[0], item[1]);
+  }
+
+  await showMessage(
+    "haii wanitaa hebatkuu, aku minta maaf kalau aku sering ga sadar udah bikin kamu cape, aku minta maaf buat semua sikap yang mungkin nyakitin kamu tanpa aku sadari bahkan se sering ituu, kadang bukan maksud aku nyakitin, cuma aku belum bisa ngatur egoku dengan baik, terimakasih karna tetap sabar, tetap ada, dan tetap sayang meski aku sering nimbulin masalah, terimakasih sudah bertahan, bahkan saat aku susah dimengerti, terimakasih sudah tetap mencintaiku dengan cara yang begitu tulus dan terimakasih karena disetiap kurangku, kamu selalu kasih lebih banyak cinta, aku sayang, sayang bangett pokoknya sama kamu, tapi maaf kalau aku belum bisa jadi apa yang kamu mau, aku menyayangimu dengan caraku, maka dari itu aku butuh kamu buat terus ada disini sama akuu, tegur kalau kalau aku salah, ajarin aku bagaimana caranya agar jadi orang yang kamu cari selama ini, karna aku tau selama inii kamuu masih nyarii orang yang bener-bener kamu mauu, tapi tenang aja bukan karna aku belum bisa nurutin ituu berarti aku gabisa, aku disinii iyaa aku orangnya hehe aku bakalan jadii orangg yang kamu cari-cari selama ini, jangan tinggalin aku yaa? aku sayang banget sama kamu love youu wanitaaa kecilkuu 💗",
+    
+    "boy"
+  );
+
+  await wait(500);
+
+  const photo = document.createElement("div");
+  photo.className = "msg";
+
+  photo.innerHTML = `
+    <div style="font-size:11px;line-height:1.5">
+      i love you sayangg 💗🫂
+    </div>
+    <img class="final-photo" src="foto-akhir.jpg" alt="Foto kenangan kita">
+    <div class="meta">${currentTime()}</div>
+  `;
+
+  const image = photo.querySelector("img");
+
+  image.onerror = () => {
+    image.style.display = "none";
+
+    const warning = document.createElement("div");
+    warning.style.cssText = "margin-top:7px;color:#ffc7c7";
+    warning.textContent =
+      "Foto belum ditemukan. Gunakan nama foto-akhir.jpg.";
+
+    image.after(warning);
+  };
+
+  chat.appendChild(photo);
+  chat.scrollTop = chat.scrollHeight;
+
+  choicesBox.innerHTML = `
+    <div class="choices-title">
+      Makasih sudah baca sampai akhir sayangg🤍
+    </div>
+    <div style="font-size:10px;line-height:1.6;color:#c6d6de;text-align:center;padding:4px 7px">
+      Semoga kamu maafin aku yaa.
+    </div>
+  `;
+
+  document.getElementById("input").textContent = "i love you sayang 💗";
+  locked = false;
+}
+
+document.getElementById("startChoice").addEventListener("click", startStory);
+
+// RESET KE HOMEPAGE IPHONE
+function restart() {
+  audio.pause();
+  audio.currentTime = 0;
+
+  music.pause();
+  music.currentTime = 0;
+
+  openingPlayed = false;
+  started = false;
+  locked = false;
+  notificationOpened = false;
+
+  chat.innerHTML = `
+    <div class="day-divider" id="todayDivider">HARI INI</div>
+
+    <div class="msg">
+      Sayang, sebelum baca pesanku, dengerin VN ini dulu ya 🥺💗
+      <div class="meta"><span class="messageTime"></span></div>
+    </div>
+
+    <div class="msg" id="openingVN">
+      <div class="vn">
+        <button class="play" id="openingPlay" aria-label="Putar voice note">▶</button>
+        <div class="vn-info">
+          <span class="duration">Voice note pembuka</span>
+          <span class="wave" id="openingWave"></span>
+        </div>
+      </div>
+      <div class="meta"><span class="messageTime"></span></div>
+    </div>
+  `;
+
+  makeWave();
+  bindVoiceButton();
+  stampMessages();
+
+  document.getElementById("startChoice").disabled = true;
+  document.getElementById("startChoice").textContent =
+    "▶ Putar VN pembuka dulu";
+  document.getElementById("startChoice").onclick = startStory;
+
+  document.getElementById("choiceTitle").textContent =
+    "Putar VN dulu, lalu lanjutkan 💬";
+
+  document.getElementById("input").textContent = "Menunggu pesan...";
+  document.getElementById("chatStatus").textContent = "online";
+  document.getElementById("notificationMessage").textContent =
+    "Sayang, buka yaa... aku mau ngomong sesuatu 🥺";
+
+  chatRoom.classList.remove("active");
+  home.classList.remove("hidden");
+
+  updateClock();
+}
+
+document.getElementById("restartButton").addEventListener("click", restart);
+</script>
+</body>
+</html>
